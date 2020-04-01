@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
+    private lateinit var nextButton: Button
+    private lateinit var questionTextView: TextView
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
@@ -24,8 +26,7 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true))
 
-    private lateinit var nextButton: Button
-    private lateinit var questionTextView: TextView
+
 
     private var currentIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +67,8 @@ class MainActivity : AppCompatActivity() {
                 R.string.incorrect_toast,
                 Toast.LENGTH_SHORT)
 
+            checkAnswer(true)
+
 //            val myToast = Toast.makeText(applicationContext,"toast message with gravity",Toast.LENGTH_SHORT)
             myToast.setGravity(Gravity.TOP,0,200)
             myToast.show()
@@ -77,8 +80,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        nextButton.setOnClickListener {
-            currentIndex = (currentIndex + 1) % questionBank.size
+        nextButton.setOnClickListener { currentIndex = (currentIndex + 1) % questionBank.size
 
             updateQuestion()
 //            val questionTextResId = questionBank[currentIndex].textResId
@@ -94,6 +96,19 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
+    }
+
+    private fun checkAnswer(userAnswer: Boolean) {
+        val correctAnswer = questionBank[currentIndex].answer
+
+        val messageResId = if (userAnswer == correctAnswer) {
+            R.string.correct_toast
+        } else {
+            R.string.incorrect_toast
+        }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+            .show()
     }
 
 
