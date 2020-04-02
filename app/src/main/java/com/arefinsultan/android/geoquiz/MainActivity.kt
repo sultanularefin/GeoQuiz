@@ -10,6 +10,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 
+private const val TAG = "MainActivity"
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +33,33 @@ class MainActivity : AppCompatActivity() {
 
 
     private var currentIndex = 0
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart() called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume() called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop() called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy() called")
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
