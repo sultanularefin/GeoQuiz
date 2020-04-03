@@ -22,13 +22,32 @@ class MainActivity : AppCompatActivity() {
     private lateinit var previousButton: ImageButton
     private lateinit var questionTextView: TextView
 
-    private val questionBank = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true))
+    private var correctAnswerCount =0;
+    //    private val questionBank = listOf(
+
+    private val AnsweredAll = Question(R.string.completed,
+        true,
+        true);
+    private var questionBank = listOf(
+        Question(R.string.question_australia,
+            true,
+            false),
+        Question(R.string.question_oceans,
+            true,
+            false),
+        Question(R.string.question_mideast,
+            false,
+            false),
+        Question(R.string.question_africa,
+            false,
+            false),
+        Question(R.string.question_americas,
+            true,
+            false),
+        Question(R.string.question_asia,
+            true,
+            false
+        ))
 
 
 
@@ -111,8 +130,30 @@ class MainActivity : AppCompatActivity() {
         }
 
         nextButton.setOnClickListener {
-            currentIndex = (currentIndex + 1) % questionBank.size
 
+            //            if(questionBank[currentIndex+1].answered != true){
+
+            var fullcheck= 0;
+            do{
+                fullcheck= fullcheck+ 1;
+                currentIndex = (currentIndex + 1) % questionBank.size
+                Log.i(TAG, "currentIndex: $currentIndex");
+                Log.i(TAG,"questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}");
+                Log.i(TAG, "fullCheck: $fullcheck");
+            }while ((questionBank[currentIndex].answered == true) && (fullcheck<6))
+//        }while (questionBank[currentIndex].answered == true)
+//            equivalent
+//        }while (questionBank[currentIndex].answered)
+            //            from (!questionBank[currentIndex].answered)
+
+            Log.i(TAG,"currentIndex before updateQuestion invoked: $currentIndex");
+            Log.i(TAG,"questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}");
+
+
+            // questionBank[currentIndex].answered !=true
+//            if(){
+//                currentIndex = (currentIndex + 1) % questionBank.size
+//            }
 
             updateQuestion()
             //   val questionTextResId = questionBank[currentIndex].textResId
@@ -128,15 +169,54 @@ class MainActivity : AppCompatActivity() {
             println("questionBank.size: ");
             println(questionBank.size);
 
-            if(currentIndex != 0){
-                currentIndex = (currentIndex - 1) % questionBank.size
+            if(currentIndex != 0) {
+                var fullcheck = 0;
+                do {
+                    fullcheck = fullcheck + 1;
+//                currentIndex = (currentIndex + 1) % questionBank.size
+                    currentIndex = currentIndex - 1;
+                    if(currentIndex==0){
+                        currentIndex = questionBank.size - 1
+                    }
+                    Log.i(TAG, "currentIndex: $currentIndex");
+                    Log.i(
+                        TAG,
+                        "questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}"
+                    );
+                    Log.i(TAG, "fullCheck: $fullcheck");
+                } while ((questionBank[currentIndex].answered == true) && (fullcheck < 6))
             }
+
+//            if(currentIndex != 0){
+//                do{
+//                    currentIndex = (currentIndex - 1) % questionBank.size
+//                }while (questionBank[currentIndex].answered != true)
+//                //    currentIndex = (currentIndex - 1) % questionBank.size
+//            }
             else{
+
                 currentIndex = questionBank.size - 1
+                var fullcheck = 0;
+                do {
+                    fullcheck = fullcheck + 1;
+//                currentIndex = (currentIndex + 1) % questionBank.size
+                    currentIndex = (currentIndex - 1) % questionBank.size
+                    Log.i(TAG, "currentIndex: $currentIndex");
+                    Log.i(
+                        TAG,
+                        "questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}"
+                    );
+                    Log.i(TAG, "fullCheck: $fullcheck");
+                } while ((questionBank[currentIndex].answered == true) && (fullcheck < 6))
+
+//                do{
+//                    currentIndex = currentIndex
+//                }while (!questionBank[currentIndex].answered)
+
+//                currentIndex = questionBank.size - 1
             }
             println("currentIndex: ")
             println(currentIndex)
-
 
             updateQuestion()
         }
@@ -147,8 +227,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        val questionTextResId = questionBank[currentIndex].textResId
+
+        var questionTextResId: Int;
+        if(questionBank[currentIndex].answered){
+
+            Log.i(TAG,"questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}");
+            questionTextResId = AnsweredAll.textResId
+
+            Log.i(TAG,"correctAnswerCount: $correctAnswerCount")
+        }
+        else{
+
+            Log.i(TAG,"!questionBank[currentIndex].answered: ");
+
+            questionTextResId = questionBank[currentIndex].textResId
+        }
+
         questionTextView.setText(questionTextResId)
+
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
@@ -159,11 +255,17 @@ class MainActivity : AppCompatActivity() {
         println("correctAnswer:____________________ ");
         println(correctAnswer);
 
+//        if(userAnswer == correctAnswer){
+//            correctAnswerCount = correctAnswerCount+1;
+//        }
         val messageResId = if (userAnswer == correctAnswer) {
+            correctAnswerCount = ++correctAnswerCount;
             R.string.correct_toast
         } else {
             R.string.incorrect_toast
         }
+
+        questionBank[currentIndex].answered = true;
 
         val myToast = Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
 
@@ -171,7 +273,4 @@ class MainActivity : AppCompatActivity() {
         myToast.show()
         //  .show()
     }
-
-
-
 }

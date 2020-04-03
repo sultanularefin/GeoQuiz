@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">GeoQuiz</string>
 
+    <string name="completed">
+        You are done.
+    </string>
+
+
     <string name="question_australia">
         Canberra is the capital of Australia.
     </string>
