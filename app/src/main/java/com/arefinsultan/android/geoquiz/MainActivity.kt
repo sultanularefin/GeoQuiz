@@ -229,12 +229,14 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
 
         var questionTextResId: Int;
+        var attemptedAll: Int = 0;
         if(questionBank[currentIndex].answered){
 
             Log.i(TAG,"questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}");
             questionTextResId = AnsweredAll.textResId
 
             Log.i(TAG,"correctAnswerCount: $correctAnswerCount")
+            attemptedAll = 1;
         }
         else{
 
@@ -243,7 +245,16 @@ class MainActivity : AppCompatActivity() {
             questionTextResId = questionBank[currentIndex].textResId
         }
 
-        questionTextView.setText(questionTextResId)
+        var stringResponse: String = getString(questionTextResId)
+
+        if (attemptedAll==1){
+            stringResponse = stringResponse + "result: " + correctAnswerCount +"/${questionBank.size}"
+            questionTextView.setText(stringResponse)
+
+        }else{
+            questionTextView.setText(stringResponse)
+        }
+
 
     }
 
