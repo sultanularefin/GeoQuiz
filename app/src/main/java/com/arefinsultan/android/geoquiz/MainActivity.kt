@@ -30,30 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val AnsweredAll = Question(R.string.completed,
         true,
         true);
-    private var questionBank = listOf(
-        Question(R.string.question_australia,
-            true,
-            false),
-        Question(R.string.question_oceans,
-            true,
-            false),
-        Question(R.string.question_mideast,
-            false,
-            false),
-        Question(R.string.question_africa,
-            false,
-            false),
-        Question(R.string.question_americas,
-            true,
-            false),
-        Question(R.string.question_asia,
-            true,
-            false
-        ))
 
-
-
-    private var currentIndex = 0
 
     override fun onStart() {
         super.onStart()
@@ -78,6 +55,12 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy() called")
+    }
+
+
+
+    private val quizViewModel: QuizViewModel by lazy {
+        ViewModelProviders.of(this).get(QuizViewModel::class.java)
     }
 
 
@@ -139,21 +122,16 @@ class MainActivity : AppCompatActivity() {
 
             //            if(questionBank[currentIndex+1].answered != true){
 
-            var fullcheck= 0;
-            do{
-                fullcheck= fullcheck+ 1;
-                currentIndex = (currentIndex + 1) % questionBank.size
-                Log.i(TAG, "currentIndex: $currentIndex");
-                Log.i(TAG,"questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}");
-                Log.i(TAG, "fullCheck: $fullcheck");
-            }while ((questionBank[currentIndex].answered == true) && (fullcheck<6))
+            quizViewModel.moveToNext()
+            updateQuestion()
+
 //        }while (questionBank[currentIndex].answered == true)
 //            equivalent
 //        }while (questionBank[currentIndex].answered)
             //            from (!questionBank[currentIndex].answered)
 
-            Log.i(TAG,"currentIndex before updateQuestion invoked: $currentIndex");
-            Log.i(TAG,"questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}");
+           // Log.i(TAG,"currentIndex before updateQuestion invoked: $currentIndex");
+          //  Log.i(TAG,"questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}");
 
 
             // questionBank[currentIndex].answered !=true
@@ -170,11 +148,12 @@ class MainActivity : AppCompatActivity() {
         previousButton.setOnClickListener {
 
             println("currentIndex: ")
-            println(currentIndex)
+            // println(currentIndex)
 
-            println("questionBank.size: ");
-            println(questionBank.size);
+           // println("questionBank.size: ");
+            //println(questionBank.size);
 
+            /*
             if(currentIndex != 0) {
                 var fullcheck = 0;
                 do {
@@ -222,8 +201,9 @@ class MainActivity : AppCompatActivity() {
 //                currentIndex = questionBank.size - 1
             }
             println("currentIndex: ")
-            println(currentIndex)
+            //println(currentIndex)
 
+            */
             updateQuestion()
         }
 
@@ -234,8 +214,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateQuestion() {
 
+        /*
         var questionTextResId: Int;
         var attemptedAll: Int = 0;
+
         if(questionBank[currentIndex].answered){
 
             Log.i(TAG,"questionBank[currentIndex].answered: ${questionBank[currentIndex].answered}");
@@ -261,14 +243,21 @@ class MainActivity : AppCompatActivity() {
             questionTextView.setText(stringResponse)
         }
 
+         */
+
+        val questionTextResId = quizViewModel.currentQuestionText
+        questionTextView.setText(questionTextResId)
 
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
+
+
         println("userAnswer _______________________: ");
         println(userAnswer);
+        val correctAnswer = quizViewModel.currentQuestionAnswer
 
-        val correctAnswer = questionBank[currentIndex].answer
+        // val correctAnswer = questionBank[currentIndex].answer
         println("correctAnswer:____________________ ");
         println(correctAnswer);
 
@@ -282,12 +271,14 @@ class MainActivity : AppCompatActivity() {
             R.string.incorrect_toast
         }
 
-        questionBank[currentIndex].answered = true;
+        // questionBank[currentIndex].answered = true;
 
         val myToast = Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
 
         myToast.setGravity(Gravity.TOP,0,200)
         myToast.show()
         //  .show()
+
+
     }
 }
