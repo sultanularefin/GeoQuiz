@@ -78,8 +78,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val provider: ViewModelProvider = ViewModelProviders.of(this)
-        val quizViewModel = provider.get(QuizViewModel::class.java)
+//        val provider: ViewModelProvider = ViewModelProviders.of(this)
+//        val quizViewModel = provider.get(QuizViewModel::class.java)
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         trueButton = findViewById(R.id.true_button)
